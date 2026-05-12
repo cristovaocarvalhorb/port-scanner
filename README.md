@@ -12,3 +12,6 @@ Explorar os fundamentos da comunicação em rede e segurança da informação at
 ## 📂 Estrutura do Projeto
 - `GhostProbe.py`: Script principal.
 - `Etapas/`: Evolução do projeto em diferentes níveis de complexidade.
+
+## ⚠️ Aviso
+Este software foi desenvolvido exclusivamente para fins educacionais e testes autorizados em ambientes controlados. O uso indevido contra sistemas sem permissão explícita é de responsabilidade exclusiva do usuário.
