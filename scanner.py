@@ -1,24 +1,30 @@
-import socket # [CONCEITO] — Biblioteca padrão para comunicações de rede (sockets)
+import socket
 
-# [PADRÃO] — Definimos o alvo (quem vamos testar) e a porta (qual ramal)
-# A porta 80 é o padrão para sites na internet (HTTP)
-alvo = "google.com" 
-porta = 80
+alvo = "google.com"
 
-# [CONCEITO] — Criamos o objeto 'socket'. 
-# AF_INET: Dizemos que usaremos endereços IPv4 (ex: 142.250.191.46)
-# SOCK_STREAM: Dizemos que usaremos o protocolo TCP (o mais comum e confiável)
-cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# [CONCEITO] — O 'range(20, 81)' cria uma sequência de 20 até 80.
+# No Python, o último número é exclusivo, por isso usamos 81 para chegar até 80.
+portas = range(20, 81) 
 
-# [ATENÇÃO] — O método connect_ex tenta a conexão e nos dá um código numérico.
-# Usamos connect_ex em vez de connect porque ele não interrompe o script se falhar.
-# Se o resultado for 0, a conexão foi aceita (porta ABERTA).
-resultado = cliente.connect_ex((alvo, porta))
+print(f"Iniciando varredura em: {alvo}")
 
-if resultado == 0:
-    print(f"Porta {porta} está ABERTA no alvo {alvo}!")
-else:
-    print(f"Porta {porta} está FECHADA ou inacessível.")
+# [PADRÃO] — O loop 'for' vai pegar uma porta de cada vez da nossa sequência
+for porta in portas:
+    # [ATENÇÃO] — Criamos um novo socket para CADA porta.
+    # Um socket é como um fósforo: você o usa para uma tentativa e depois descarta.
+    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    # [CONCEITO] — Definimos um "Timeout" (tempo de espera).
+    # Sem isso, se uma porta não responder, o script pode ficar travado por minutos.
+    # Aqui, esperamos apenas 0.5 segundos por porta.
+    cliente.settimeout(0.5)
 
-# [REPLICAR] — Sempre feche o socket para não deixar "fios soltos" no seu sistema.
-cliente.close()
+    resultado = cliente.connect_ex((alvo, porta))
+
+    if resultado == 0:
+        print(f"Porta {porta} [ABERTA]")
+    
+    # Fechamos a conexão atual antes de ir para a próxima porta no loop
+    cliente.close()
+
+print("Varredura finalizada.")
