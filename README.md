@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon/GhostProbe_Icon.png" alt="GhostProbe Icon" width="200">
+  <img src="icon/GhostProbe_Logo.png" alt="GhostProbe Icon" width="200">
 </p>
 
 # GhostProbe
