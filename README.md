@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon/GhostProbe_Icon.png" alt="GhostProbe Icon" width="200">
+</p>
+
 # GhostProbe
 
 GhostProbe é um Port Scanner desenvolvido com foco educacional para estudo aprofundado de redes, protocolos TCP/IP e fundamentos de cibersegurança ofensiva. O projeto foi concebido como uma plataforma prática para exploração de técnicas de enumeração de portas, análise de serviços e comunicação em baixo nível utilizando sockets.
