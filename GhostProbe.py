@@ -1,30 +1,42 @@
 import socket
+import sys # [CONCEITO] — Biblioteca para interagir com o sistema (ex: fechar o programa)
 
-alvo = "google.com"
+# [PADRÃO] — Permitimos que o usuário digite o alvo em tempo real
+alvo = input("Digite o endereço (IP ou Domínio) para escanear: ")
 
-# [CONCEITO] — O 'range(20, 81)' cria uma sequência de 20 até 80.
-# No Python, o último número é exclusivo, por isso usamos 81 para chegar até 80.
-portas = range(20, 81) 
+print("-" * 50)
+print(f"GhostProbe escaneando: {alvo}")
+print("-" * 50)
 
-print(f"Iniciando varredura em: {alvo}")
+try:
+    # [CONCEITO] — Vamos escanear as primeiras 100 portas (o intervalo comum)
+    for porta in range(1, 101): 
+        cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
+        # [ATENÇÃO] — Diminuímos o timeout para 0.1s para o scanner ser mais ágil
+        cliente.settimeout(0.1)
+        
+        resultado = cliente.connect_ex((alvo, porta))
+        
+        if resultado == 0:
+            print(f"Porta {porta}: ABERTA")
+        
+        cliente.close()
 
-# [PADRÃO] — O loop 'for' vai pegar uma porta de cada vez da nossa sequência
-for porta in portas:
-    # [ATENÇÃO] — Criamos um novo socket para CADA porta.
-    # Um socket é como um fósforo: você o usa para uma tentativa e depois descarta.
-    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-    # [CONCEITO] — Definimos um "Timeout" (tempo de espera).
-    # Sem isso, se uma porta não responder, o script pode ficar travado por minutos.
-    # Aqui, esperamos apenas 0.5 segundos por porta.
-    cliente.settimeout(0.5)
+# [PADRÃO] — Capturamos erros específicos para dar uma resposta amigável
+except socket.gaierror:
+    # [CONCEITO] — gaierror acontece quando o DNS não encontra o endereço (ex: erro de digitação)
+    print("\n[ERRO] O endereço não pôde ser resolvido. Verifique o alvo.")
+    sys.exit()
 
-    resultado = cliente.connect_ex((alvo, porta))
+except KeyboardInterrupt:
+    # [REPLICAR] — Captura o CTRL+C do usuário para sair sem erro
+    print("\n[!] Saindo do programa...")
+    sys.exit()
 
-    if resultado == 0:
-        print(f"Porta {porta} [ABERTA]")
-    
-    # Fechamos a conexão atual antes de ir para a próxima porta no loop
-    cliente.close()
+except socket.error:
+    print("\n[ERRO] Não foi possível conectar ao servidor.")
+    sys.exit()
 
-print("Varredura finalizada.")
+print("-" * 50)
+print("Escaneamento finalizado.")
